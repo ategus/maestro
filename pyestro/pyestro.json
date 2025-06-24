@@ -1,0 +1,32 @@
+{
+  "ansible": {
+    "config_file": null,
+    "galaxy_roles_dir": ".ansible-galaxy-roles",
+    "managed_banner": "Ansible managed. All local changes will be lost!",
+    "scp_if_ssh": true,
+    "timeout": 60
+  },
+  "class_filter": null,
+  "dry_run": true,
+  "force": false,
+  "inventory_dirs": {
+    "main": "./inventory"
+  },
+  "local_dirs": {
+    "any_confix": "none",
+    "packer_templates": "none",
+    "vagrant_boxes": "none"
+  },
+  "maestro_dir": "/Users/rox/code/test/maestro/pyestro",
+  "node_filter": null,
+  "playbook_dirs": {
+    "common_playbooks": "./common_playbooks"
+  },
+  "project_filter": null,
+  "repositories": {
+    "maestro": "https://github.com/inofix/maestro"
+  },
+  "rsync_options": "-a -m --exclude=.keep",
+  "verbose": 1,
+  "work_dir": "/Users/rox/code/test/maestro/pyestro/workdir"
+}

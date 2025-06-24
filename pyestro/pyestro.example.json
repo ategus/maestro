@@ -1,0 +1,36 @@
+{
+  "maestro_dir": ".",
+  "work_dir": "./workdir",
+  "dry_run": true,
+  "verbose": 1,
+  "force": false,
+  "repositories": {
+    "maestro": "https://github.com/inofix/maestro",
+    "common_inv": "https://github.com/inofix/common-inv",
+    "example_inv": "https://github.com/inofix/example-inv",
+    "common_playbooks": "https://github.com/inofix/common-playbooks"
+  },
+  "inventory_dirs": {
+    "common_inv": "./common_inv",
+    "example_inv": "./example_inv"
+  },
+  "playbook_dirs": {
+    "common_playbooks": "./common_playbooks"
+  },
+  "local_dirs": {
+    "any_confix": "none",
+    "packer_templates": "none",
+    "vagrant_boxes": "none"
+  },
+  "ansible": {
+    "config_file": "./ansible.cfg",
+    "managed_banner": "Ansible managed. All local changes will be lost!",
+    "timeout": 60,
+    "scp_if_ssh": true,
+    "galaxy_roles_dir": ".ansible-galaxy-roles"
+  },
+  "rsync_options": "-a -m --exclude=.keep",
+  "node_filter": null,
+  "class_filter": null,
+  "project_filter": null
+}
