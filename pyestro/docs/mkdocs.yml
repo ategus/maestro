@@ -32,6 +32,9 @@ nav:
     - Installation: getting-started/installation.md
     - Quick Start: getting-started/quickstart.md
     - Configuration: getting-started/configuration.md
+  - Tutorials:
+    - Overview: tutorials/index.md
+    - Home Network Setup: tutorials/home-network-setup.md
   - User Guide:
     - Commands: user-guide/commands.md
     - Reclass Integration: user-guide/reclass.md

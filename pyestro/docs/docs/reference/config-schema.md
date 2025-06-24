@@ -83,21 +83,80 @@ Git repository configuration for cloning and management.
 
 ### Inventory Section
 
-Reclass inventory directory configuration.
+Inventory configuration supporting multiple backends.
 
 ```json
 {
     "inventory": {
-        "main": "./inventory",
-        "secondary": "./inventory2",
-        "common": "/shared/inventory"
+        "backend": "reclass",
+        "sources": {
+            "main": "./inventory",
+            "secondary": "./inventory2",
+            "common": "/shared/inventory"
+        }
     }
 }
 ```
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `<inventory_name>` | string | Path to reclass inventory directory |
+| `backend` | string | Inventory backend: `reclass`, `ansible`, `jsonnet`, `consul` |
+| `sources` | object | Backend-specific source configuration |
+
+#### Supported Backends
+
+**Reclass (default):**
+```json
+{
+    "inventory": {
+        "backend": "reclass",
+        "sources": {
+            "main": "./inventory"
+        }
+    }
+}
+```
+
+**Ansible Native:**
+```json
+{
+    "inventory": {
+        "backend": "ansible",
+        "sources": {
+            "inventory_file": "./hosts.yml",
+            "group_vars": "./group_vars",
+            "host_vars": "./host_vars"
+        }
+    }
+}
+```
+
+**Jsonnet:**
+```json
+{
+    "inventory": {
+        "backend": "jsonnet",
+        "sources": {
+            "main": "./inventory.jsonnet",
+            "lib_paths": ["./lib", "./vendor"]
+        }
+    }
+}
+```
+
+**Consul:**
+```json
+{
+    "inventory": {
+        "backend": "consul",
+        "sources": {
+            "endpoint": "https://consul.company.com:8500",
+            "prefix": "ansible/inventory",
+            "token": "${CONSUL_TOKEN}"
+        }
+    }
+}
+```
 
 **Directory Structure Expected:**
 ```
@@ -200,8 +259,11 @@ File synchronization options using rsync.
         "custom_roles": "/local/path/to/roles"
     },
     "inventory": {
-        "main": "./inventory",
-        "testing": "./test-inventory"
+        "backend": "reclass",
+        "sources": {
+            "main": "./inventory",
+            "testing": "./test-inventory"
+        }
     },
     "playbooks": {
         "common_playbooks": "./common_playbooks",
@@ -225,6 +287,53 @@ File synchronization options using rsync.
         ]
     }
 }
+
+## User-Friendly Features
+
+### Auto-Detection and Smart Defaults
+
+Pyestro can automatically detect common configurations:
+
+```bash
+# Auto-detect project structure and generate config
+python pyestro.py init --auto-detect
+
+# Interactive configuration wizard
+python pyestro.py init --interactive
+
+# Generate config from existing .maestro file
+python pyestro.py init --from-maestro .maestro
+```
+
+### Configuration Templates
+
+Pre-built templates for common scenarios:
+
+```bash
+# List available templates
+python pyestro.py templates list
+
+# Initialize from template
+python pyestro.py init --template ansible-reclass
+python pyestro.py init --template kubernetes-ops
+python pyestro.py init --template simple-automation
+```
+
+### Validation and Health Checks
+
+```bash
+# Comprehensive configuration validation
+python pyestro.py doctor
+
+# Check repository connectivity
+python pyestro.py config check-repos
+
+# Validate inventory structure
+python pyestro.py config check-inventory
+
+# Test ansible connectivity
+python pyestro.py config check-ansible
+```
 ```
 
 ## Environment Variable Overrides

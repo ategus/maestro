@@ -1,0 +1,164 @@
+# Home Network Template Configuration
+# Copy this to pyestro.yml and customize for your setup
+
+maestro:
+  project_dir: /home/user/home-automation
+  work_dir: ./workdir
+  dry_run: true  # Always start with dry run for safety
+  force: false
+  verbose: 2
+
+repositories:
+  # Core Ansible content for home automation
+  home_automation_playbooks: https://github.com/ansible/ansible-examples.git
+  raspberry_pi_roles: https://github.com/geerlingguy/ansible-role-docker.git
+  
+  # Optional: Your own configuration repositories
+  # homeassistant_config: git@github.com:yourusername/homeassistant-config.git
+  # custom_playbooks: git@github.com:yourusername/home-ansible-playbooks.git
+
+inventory:
+  backend: reclass  # Can also use: ansible, jsonnet, consul
+  sources:
+    main: ./inventory
+
+playbooks:
+  main: ./playbooks
+  roles: ./roles
+  galaxy_roles: ./.ansible-galaxy-roles
+
+ansible:
+  timeout: 120
+  host_key_checking: false  # Useful for home networks with dynamic IPs
+  gathering: smart
+  vault_password_file: ./vault_pass.txt
+  
+  # Home network specific settings
+  ssh_args: "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+  pipelining: true
+  
+  # Retry settings for potentially unreliable home network connections
+  timeout: 30
+  connect_timeout: 10
+  ssh_retries: 3
+
+# Home network specific configuration
+network:
+  domain: home.local
+  management_subnet: 192.168.1.0/24
+  iot_subnet: 192.168.10.0/24
+  
+  # Common home network devices
+  gateway: 192.168.1.1
+  dns_servers:
+    - 192.168.1.1    # Router DNS
+    - 8.8.8.8        # Google DNS
+    - 1.1.1.1        # Cloudflare DNS
+
+# Device-specific templates
+devices:
+  raspberry_pi:
+    default_user: pi
+    python_interpreter: /usr/bin/python3
+    ansible_ssh_private_key_file: ~/.ssh/id_rsa
+    
+  nas_server:
+    default_user: root
+    python_interpreter: /usr/bin/python3
+    management_interface: eth0
+
+# Security settings for home environment
+security:
+  ssh_port: 22
+  ufw_enabled: true
+  fail2ban_enabled: true
+  auto_updates: true
+  
+  # Allow common home network ports
+  allowed_ports:
+    - 22     # SSH
+    - 80     # HTTP
+    - 443    # HTTPS
+    - 8123   # Home Assistant
+    - 1883   # MQTT
+    - 5000   # Various web services
+    - 8080   # Alt HTTP
+    - 9090   # Prometheus/monitoring
+
+# Backup configuration
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention_days: 30
+  
+  destinations:
+    local:
+      enabled: true
+      path: ./backups
+      
+    nas:
+      enabled: true
+      path: /mnt/tank/backups/pyestro
+      host: 192.168.1.200
+      user: backup_user
+      
+    # cloud:
+    #   enabled: false
+    #   provider: s3
+    #   bucket: home-backup-bucket
+
+# Monitoring and alerting
+monitoring:
+  enabled: true
+  node_exporter_port: 9100
+  prometheus_enabled: false  # Set to true if running Prometheus
+  grafana_enabled: false     # Set to true if running Grafana
+  
+  # Home Assistant specific monitoring
+  homeassistant:
+    health_check_url: "http://192.168.1.100:8123/api/"
+    check_interval: 300  # 5 minutes
+    
+  # NAS specific monitoring  
+  nas:
+    zfs_monitoring: true
+    smart_monitoring: true
+    disk_usage_threshold: 85  # Alert at 85% usage
+
+# Home automation specific settings
+homeassistant:
+  # Will be populated from inventory classes
+  default_config_path: /usr/share/hassio/homeassistant
+  backup_path: /usr/share/hassio/backup
+  
+  # Common integrations to set up
+  integrations:
+    - mqtt
+    - zwave
+    - zigbee
+    - prometheus
+    - influxdb
+    
+nas:
+  # Will be populated from inventory classes  
+  default_zfs_options:
+    compression: lz4
+    dedup: "off"
+    atime: "off"
+    
+  # Common services to configure
+  services:
+    - samba
+    - nfs
+    - ssh
+    - smart_monitoring
+
+# Development and testing
+development:
+  test_mode: false
+  skip_ssl_verify: true  # For self-signed certs in home lab
+  local_testing: true
+  
+  # Useful for testing without affecting production
+  test_inventory: ./test-inventory
+  test_playbooks: ./test-playbooks
