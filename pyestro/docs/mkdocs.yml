@@ -45,6 +45,7 @@ nav:
     - Contributing: developer-guide/contributing.md
   - Reference:
     - Original Maestro Spec: reference/maestro-spec.md
+    - Legacy Maestro Tutorial: reference/legacy-maestro-tutorial.md
     - Configuration Schema: reference/config-schema.md
     - CLI Reference: reference/cli.md
     - Migration Guide: reference/migration.md
