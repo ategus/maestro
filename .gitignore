@@ -1,3 +1,4 @@
 .maestro
 workdir
 *.swp
+.venv
