@@ -3,6 +3,20 @@ Orchestrate a number of different orchestras (i.e. config management environemen
 
 ![Maestro Logo](maestro.png "A thumbsketch of what this is all about..")
 
+## 🚀 New: Pyestro - Python Successor
+
+**Maestro has been modernized as [Pyestro](./pyestro/)!** Pyestro is a complete rewrite in Python that provides:
+
+- Modern Python architecture with type hints and comprehensive testing
+- Enhanced security and validation features
+- Improved configuration management with YAML support
+- Better integration with modern DevOps workflows
+- Comprehensive documentation and tutorials
+
+For new projects, we recommend using **Pyestro**. See the [Pyestro Summary](./PYESTRO-SUMMARY.md) for key information, or explore the full [Pyestro Documentation](./pyestro/docs/).
+
+---
+
 ## Introduction
 
 'Pet' vs. 'herd'? This is the 'stable' approach!
@@ -55,6 +69,16 @@ tricks..
 
 It is currently written in bash and gawk (see [4]), but will probably
 be rewritten in python[5] one day.
+
+## Migration to Pyestro
+
+If you're currently using Maestro and want to migrate to Pyestro:
+
+1. **Review the [Migration Guide](./pyestro/docs/docs/reference/migration.md)** for detailed migration steps
+2. **Check the [Legacy Maestro Tutorial](./pyestro/docs/docs/reference/legacy-maestro-tutorial.md)** to see equivalent configurations
+3. **Start with the [Pyestro Quick Start](./pyestro/docs/docs/getting-started/quickstart.md)** for new setups
+
+Both Maestro and Pyestro can coexist during the transition period.
 
 --
  [1] http://reclass.pantsfullofunix.net/
