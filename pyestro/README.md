@@ -1,7 +1,7 @@
 # 🎼 Pyestro
 
 <div align="center">
-  <img src="pyestro_logo.png" alt="Pyestro Logo" width="200" height="auto" />
+  <img src="pyestro_logo_transparent.png" alt="Pyestro Logo" width="200" height="auto" />
 </div>
 
 > **🚀 The modern Python evolution of Maestro** - A next-generation configuration management orchestrator that provides a unified interface to manage multiple server environments with enhanced security, maintainability, and developer experience.
