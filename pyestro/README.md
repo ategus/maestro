@@ -25,6 +25,12 @@ Pyestro maintains the core philosophy of [Maestro](https://github.com/inofix/mae
 
 ## ✨ Key Features
 
+### 🚀 **Project Templates**
+- **Basic**: Minimal setup for getting started
+- **Home Network**: Complete home automation with Home Assistant, NAS, monitoring
+- **PostgreSQL**: Production database infrastructure with automated backups
+- **Interactive Wizard**: Guided project creation with customization
+
 ### 🔧 **Multi-Tool Orchestration**
 - Seamlessly orchestrate Ansible, Salt, and other configuration management tools
 - Unified interface across different automation platforms
@@ -78,14 +84,19 @@ pre-commit install
 
 ## 🚀 Quick Start
 
-### 1️⃣ **Initialize Your Project**
+### 1️⃣ **Create Your Project**
 ```bash
-# Copy and customize configuration
-cp pyestro.example.json pyestro.json
-# Edit pyestro.json with your settings
+# Create a basic project
+python pyestro.py create basic my-project
 
-# Initialize project structure
-python pyestro.py --init
+# Create a home automation project
+python pyestro.py create home-network my-home
+
+# Create a PostgreSQL database infrastructure
+python pyestro.py create postgres my-database
+
+# Interactive project creation wizard
+python pyestro.py create --wizard
 ```
 
 ### 2️⃣ **Sync Your Repositories**
@@ -244,6 +255,7 @@ Pyestro prioritizes security with enterprise-grade features:
 
 ### 🎯 **Tutorials & Examples**
 - 🏠 [Home Network Setup](docs/docs/tutorials/home-network-setup.md) - Real-world example
+- 🗄️ [PostgreSQL Database Setup](docs/docs/tutorials/postgresql-setup.md) - Production database infrastructure
 - 🔄 [Migration from Maestro](docs/docs/reference/migration.md) - Step-by-step migration
 - 📊 [Configuration Schema](docs/docs/reference/config-schema.md) - Complete reference
 
