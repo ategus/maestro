@@ -1,0 +1,255 @@
+# {{project_name}} - Home Network Automation
+
+A comprehensive home automation and network management project powered by Pyestro.
+
+## Overview
+
+This project provides automated configuration management for your home network including:
+
+{% if has_homeassistant == 'y' %}
+- 🏠 **Home Assistant**: Home automation hub
+{% endif %}
+{% if has_nas == 'y' %}
+- 💾 **NAS Server**: Network-attached storage with media services
+{% endif %}
+{% if has_monitoring == 'y' %}
+- 📊 **Network Monitoring**: System monitoring and alerting
+{% endif %}
+- 🔐 **Security**: Firewall, SSH hardening, and access control
+- 🌐 **Network Services**: DNS, DHCP, and routing configuration
+
+## Network Configuration
+
+- **Network Name**: {{network_name}}
+- **Domain**: {{domain_name}}  
+- **Subnet**: {{network_subnet}}
+
+## Project Structure
+
+```
+{{project_name}}/
+├── pyestro.json              # Main configuration
+├── inventory/                # Device and service definitions
+│   ├── classes/
+│   │   ├── hardware/         # Hardware-specific configs
+│   │   ├── services/         # Service definitions  
+│   │   ├── network/          # Network configurations
+│   │   └── security/         # Security policies
+│   └── nodes/                # Individual device configs
+├── playbooks/                # Ansible automation
+│   ├── site.yml              # Main playbook
+│   ├── roles/                # Custom roles
+│   └── group_vars/           # Group variables
+├── scripts/                  # Helper scripts
+├── {{backup_location}}/      # Backup storage
+└── README.md                 # This file
+```
+
+## Quick Start
+
+### 1. Setup Environment
+
+```bash
+# Install dependencies
+pip install pyestro ansible
+
+# Navigate to project directory
+cd {{project_name}}
+
+# Validate configuration
+pyestro config validate
+
+# Setup repositories and dependencies  
+pyestro setup
+```
+
+### 2. Configure Your Devices
+
+Edit the inventory files to match your hardware:
+
+{% if has_homeassistant == 'y' %}
+- `inventory/nodes/homeassistant.yml` - Home Assistant configuration
+{% endif %}
+{% if has_nas == 'y' %}
+- `inventory/nodes/nas.yml` - NAS server configuration
+{% endif %}
+- `inventory/classes/network/` - Network configuration files
+
+### 3. Deploy Configuration
+
+```bash
+# Check connectivity to all devices
+pyestro status
+
+# Deploy to all devices
+pyestro ansible playbook site.yml
+
+# Deploy to specific device
+pyestro ansible playbook site.yml --limit homeassistant
+```
+
+## Device Management
+
+### Available Devices
+
+{% if has_homeassistant == 'y' %}
+#### Home Assistant
+- **Role**: Home automation hub
+- **Services**: Home Assistant, MQTT, Node-RED
+- **Management**: `pyestro nodes show homeassistant`
+{% endif %}
+
+{% if has_nas == 'y' %}
+#### NAS Server  
+- **Role**: Network storage and media
+- **Services**: Samba, Plex, Nextcloud, Backup
+- **Management**: `pyestro nodes show nas`
+{% endif %}
+
+{% if has_monitoring == 'y' %}
+#### Monitoring
+- **Role**: Network monitoring and alerting
+- **Services**: Prometheus, Grafana, Alertmanager
+- **Management**: `pyestro nodes show monitoring`
+{% endif %}
+
+### Common Commands
+
+```bash
+# List all configured devices
+pyestro nodes list
+
+# Show device details
+pyestro nodes show <device-name>
+
+# Deploy specific service
+pyestro ansible playbook playbooks/services/<service>.yml
+
+# Run health checks
+pyestro ansible ping
+
+# Update all devices
+pyestro ansible playbook site.yml --tags update
+```
+
+## Services and Applications
+
+{% if has_homeassistant == 'y' %}
+### Home Assistant
+- **Web Interface**: http://homeassistant.{{domain_name}}:8123
+- **Config**: `inventory/classes/services/homeassistant.yml`
+- **Automations**: Managed via Home Assistant UI
+{% endif %}
+
+{% if has_nas == 'y' %}
+### NAS Services
+- **File Sharing**: smb://nas.{{domain_name}}
+- **Media Server**: http://nas.{{domain_name}}:32400 (Plex)
+- **Cloud Storage**: http://nas.{{domain_name}}/nextcloud
+{% endif %}
+
+{% if has_monitoring == 'y' %}
+### Monitoring Dashboard
+- **Grafana**: http://monitoring.{{domain_name}}:3000
+- **Prometheus**: http://monitoring.{{domain_name}}:9090
+- **System Metrics**: CPU, memory, storage, network
+{% endif %}
+
+## Security Features
+
+- **Firewall**: Automated UFW configuration
+- **SSH Hardening**: Key-based authentication, fail2ban
+- **SSL/TLS**: Automated certificate management
+- **Access Control**: Role-based permissions
+- **Backup Encryption**: Automated encrypted backups
+
+## Backup and Recovery
+
+Automated backups are configured for:
+- Device configurations
+- Application data
+- User files and media
+- Database dumps
+
+Backup location: `{{backup_location}}/`
+
+```bash
+# Manual backup
+pyestro ansible playbook playbooks/backup.yml
+
+# Restore from backup
+pyestro ansible playbook playbooks/restore.yml
+```
+
+## Customization
+
+### Adding New Devices
+
+1. Create device configuration: `inventory/nodes/new-device.yml`
+2. Assign appropriate classes
+3. Update network configuration if needed
+4. Test deployment: `pyestro ansible playbook site.yml --limit new-device`
+
+### Custom Services
+
+1. Create service class: `inventory/classes/services/my-service.yml`
+2. Add to appropriate nodes
+3. Create playbook: `playbooks/services/my-service.yml`
+4. Deploy: `pyestro ansible playbook playbooks/services/my-service.yml`
+
+## Troubleshooting
+
+### Common Issues
+
+**Device Connectivity**
+```bash
+# Test SSH connectivity
+pyestro status
+
+# Check Ansible connectivity  
+pyestro ansible ping
+```
+
+**Configuration Validation**
+```bash
+# Validate Pyestro config
+pyestro config validate
+
+# Check inventory syntax
+pyestro nodes list
+```
+
+**Service Issues**
+```bash
+# Check service status
+pyestro ansible shell "systemctl status <service>"
+
+# View service logs
+pyestro ansible shell "journalctl -u <service> -f"
+```
+
+## Advanced Features
+
+- **Rolling Updates**: Zero-downtime service updates
+- **A/B Testing**: Test configurations safely
+- **Disaster Recovery**: Full system restoration
+- **Performance Monitoring**: Automated performance tuning
+- **Security Scanning**: Regular security assessments
+
+## Documentation
+
+- [Pyestro Documentation](https://github.com/inofix/pyestro)
+- [Home Network Tutorial](https://pyestro.readthedocs.io/tutorials/home-network/)
+- [Ansible Best Practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
+
+## Support
+
+- **Issues**: Report problems via GitHub Issues  
+- **Community**: Join our Discord/Slack community
+- **Documentation**: Complete guides and tutorials
+
+---
+
+**Network**: {{network_name}}.{{domain_name}} ({{network_subnet}})
+**Template**: home-network
+**Generated**: {% raw %}{{ ansible_date_time.iso8601 if ansible_date_time is defined else "Unknown" }}{% endraw %}

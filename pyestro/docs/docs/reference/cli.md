@@ -7,8 +7,13 @@ Complete command-line reference for Pyestro.
 
 ## Command Index
 
+### Project Creation
+- [`create`](../user-guide/commands.md#create) - Create new project from template
+- [`create --wizard`](../user-guide/commands.md#create-wizard) - Interactive project creation
+- [`create --list`](../user-guide/commands.md#create-list) - List available templates
+
 ### Core Commands
-- [`init`](../user-guide/commands.md#init) - Initialize new project
+- [`init`](../user-guide/commands.md#init) - Initialize new project (legacy)
 - [`setup`](../user-guide/commands.md#setup) - Setup repositories
 - [`status`](../user-guide/commands.md#status) - Show project status
 

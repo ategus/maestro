@@ -37,6 +37,7 @@ nav:
     - Home Network Setup: tutorials/home-network-setup.md
   - User Guide:
     - Commands: user-guide/commands.md
+    - Project Templates: user-guide/project-templates.md
     - Reclass Integration: user-guide/reclass.md
     - Ansible Integration: user-guide/ansible.md
   - Developer Guide:

@@ -2,52 +2,87 @@
 
 This guide will get you up and running with Pyestro in just a few minutes.
 
-## 1. Initialize Your Project
+## 1. Create Your Project
+
+### Option A: Interactive Project Creation (Recommended)
 
 ```bash
-# Navigate to your project directory
-cd /path/to/your/project
-
-# Initialize Pyestro configuration
-python pyestro.py init
+# Interactive wizard for guided setup
+python pyestro.py create --wizard
 ```
 
-This creates:
+### Option B: Direct Project Creation
+
+```bash
+# Create a basic project
+python pyestro.py create basic my-project
+
+# Create a home automation project
+python pyestro.py create home-network my-home
+```
+
+### Option C: See Available Templates
+
+```bash
+# List all available project templates
+python pyestro.py create --list
+```
+
+This creates a complete project structure with:
 - `pyestro.json` - Main configuration file
-- `workdir/` - Temporary working directory
+- `workdir/` - Working directory for operations
+- `inventory/` - Reclass inventory structure
+- `playbooks/` - Ansible playbooks directory
+- `README.md` - Project documentation
 - `.gitignore` - Git ignore patterns
 
-## 2. Configure Your Project
+## 2. Navigate to Your Project
 
-Edit the generated `pyestro.json`:
+```bash
+# Change to your new project directory
+cd my-project  # or whatever you named your project
+```
+
+## 3. Review and Customize Configuration
+
+The generated `pyestro.json` is already configured with sensible defaults. Review and customize as needed:
 
 ```json
 {
-    "maestro": {
-        "project_dir": "/path/to/your/project",
-        "work_dir": "./workdir",
-        "dry_run": true,
-        "verbose": 1
-    },
-    "repositories": {
-        "common_inv": "https://github.com/yourorg/inventory.git",
-        "common_playbooks": "https://github.com/yourorg/playbooks.git"
-    },
-    "inventory": {
-        "main": "./inventory"
-    }
+  "maestro_dir": ".",
+  "work_dir": "./workdir",
+  "dry_run": false,
+  "verbose": 1,
+  "repositories": {},
+  "inventory_dirs": {
+    "local": "./inventory"
+  },
+  "playbook_dirs": {
+    "local": "./playbooks"
+  },
+  "ansible": {
+    "config_file": "./ansible.cfg",
+    "managed_banner": "Ansible managed: my-project.",
+    "timeout": 60
+  }
 }
 ```
 
-## 3. Setup Repositories
+## 4. Setup Project Environment
 
 ```bash
-# Download and setup required repositories
+# Validate your configuration
+python pyestro.py config validate
+
+# Setup repositories and dependencies
 python pyestro.py setup
 ```
 
 This will:
-- Clone configured repositories
+- Validate your configuration
+- Clone any configured repositories
+- Set up the working directory structure
+- Install required dependencies
 - Set up inventory structure
 - Validate configuration
 

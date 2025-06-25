@@ -7,6 +7,7 @@
 
 ## Key Features
 
+- **🚀 Project Templates** - Quick-start templates for common scenarios (basic, home automation)
 - **🐍 Modern Python Implementation** - Complete rewrite of the original bash-based Maestro
 - **🔧 Configuration Management** - Unified interface for multiple CM tools
 - **📊 Reclass Integration** - Leverage reclass as your knowledge base/CMDB
@@ -26,8 +27,10 @@ cd pyestro
 # Install dependencies
 pip install -r requirements.txt
 
-# Initialize your first project
-python pyestro.py init
+# Create your first project
+python pyestro.py create basic my-project
+# OR use the interactive wizard
+python pyestro.py create --wizard
 ```
 
 ### Basic Usage

@@ -1,0 +1,39 @@
+{
+  "name": "basic",
+  "description": "Basic Pyestro project with minimal configuration",
+  "version": "1.0.0",
+  "author": "Pyestro Team",
+  "variables": {
+    "work_dir": {
+      "prompt": "Working directory name",
+      "default": "workdir",
+      "description": "Directory where Pyestro will store working files"
+    },
+    "inventory_repo": {
+      "prompt": "Inventory repository URL (optional)",
+      "default": "",
+      "description": "Git repository URL for inventory/metadata"
+    },
+    "playbooks_repo": {
+      "prompt": "Playbooks repository URL (optional)", 
+      "default": "",
+      "description": "Git repository URL for Ansible playbooks"
+    },
+    "enable_ansible": {
+      "prompt": "Enable Ansible integration (y/n)",
+      "default": "y",
+      "description": "Whether to include Ansible configuration"
+    }
+  },
+  "files": [
+    "pyestro.json.j2",
+    "README.md.j2",
+    ".gitignore.j2"
+  ],
+  "directories": [
+    "{{work_dir}}",
+    "inventory/classes",
+    "inventory/nodes", 
+    "playbooks"
+  ]
+}

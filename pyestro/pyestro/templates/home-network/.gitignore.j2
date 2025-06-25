@@ -1,0 +1,83 @@
+# Pyestro working directory
+workdir/
+
+# Ansible files
+*.retry
+.ansible-galaxy-roles/
+ansible.cfg
+
+# Secrets and credentials
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+.env
+.env.local
+.vault_pass
+vault_pass.txt
+
+# Backup files
+{{backup_location}}/*.tar.gz
+{{backup_location}}/*.zip
+{{backup_location}}/tmp/
+
+# Local configuration overrides
+pyestro.local.json
+config.local.*
+inventory/host_vars/*/secrets.yml
+
+# Logs
+*.log
+logs/
+/var/log/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Home Assistant specific
+home-assistant.log
+home-assistant_v2.db*
+.HA_VERSION
+.cloud/
+.storage/
+
+# Media files (optional - uncomment if you don't want to track media)
+# media/
+# downloads/
+# *.mp4
+# *.mkv
+# *.avi
+
+# Database backups (keep structure, not content)
+*.sql
+*.db
+*.sqlite*

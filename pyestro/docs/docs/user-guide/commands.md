@@ -23,14 +23,68 @@ python pyestro.py [global-options] <command> [command-options] [arguments]
 
 ## Main Commands
 
+### Project Creation
+
+#### `create`
+Create a new Pyestro project from a template.
+
+```bash
+python pyestro.py create <template> <project-name> [options]
+python pyestro.py create --wizard
+python pyestro.py create --list
+```
+
+**Template Creation:**
+```bash
+# Create basic project
+python pyestro.py create basic my-project
+
+# Create home automation project
+python pyestro.py create home-network my-home
+
+# Create with custom variables
+python pyestro.py create basic my-project --var=work_dir=custom-workdir
+```
+
+**Interactive Mode:**
+```bash
+# Guided project creation
+python pyestro.py create --wizard
+```
+
+**Available Templates:**
+```bash
+# List all templates
+python pyestro.py create --list
+```
+
+Creates a complete project structure:
+- `pyestro.json` configuration file
+- `workdir/` directory
+- `inventory/` reclass structure
+- `playbooks/` Ansible directory
+- `README.md` documentation
+- `.gitignore` file
+
+**Options:**
+- `--var=key=value` - Set template variables
+- `--dir=path` - Custom target directory
+
+**Available Templates:**
+- `basic` - Minimal Pyestro project
+- `home-network` - Complete home automation setup
+
 ### Setup and Initialization
 
-#### `init`
-Initialize a new Pyestro project.
+#### `init` (Legacy)
+Initialize a new Pyestro project using the legacy method.
 
 ```bash
 python pyestro.py init [--force]
 ```
+
+!!! note "Deprecated"
+    Use `pyestro create` instead for better project scaffolding.
 
 Creates:
 - `pyestro.json` configuration file

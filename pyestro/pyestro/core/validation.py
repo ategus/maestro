@@ -80,6 +80,38 @@ class InputValidator:
         return p
     
     @staticmethod
+    def validate_path_component(component: str) -> bool:
+        """Validate a single path component (filename/directory name)."""
+        if not component or not isinstance(component, str):
+            return False
+        
+        component = component.strip()
+        
+        # Check for invalid characters
+        invalid_chars = '<>:"|?*\0'
+        if any(char in component for char in invalid_chars):
+            return False
+        
+        # Check for reserved names on Windows
+        reserved_names = {
+            'CON', 'PRN', 'AUX', 'NUL',
+            'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9',
+            'LPT1', 'LPT2', 'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'
+        }
+        if component.upper() in reserved_names:
+            return False
+        
+        # Check for path traversal
+        if component in ('.', '..'):
+            return False
+        
+        # Check length (most filesystems have 255 byte limit)
+        if len(component.encode('utf-8')) > 255:
+            return False
+        
+        return True
+    
+    @staticmethod
     def validate_url(url: str) -> str:
         """Validate URLs."""
         if not url or not isinstance(url, str):

@@ -10,6 +10,7 @@ from typing import Optional
 from ..core.config import ConfigManager, MaestroConfig
 from ..core.git import GitManager
 from ..core.file_ops import FileManager
+from ..core.templates import ProjectGenerator
 from ..parsers.reclass_parser import ReclassManager
 from ..integrations.ansible import AnsibleManager
 
@@ -22,20 +23,22 @@ Pyestro - Python Configuration Management Orchestrator
 Usage: pyestro [options] command [arguments]
 
 Commands:
-  init                    Initialize new project
-  setup                   Setup dependencies and clone repositories
-  config show            Show current configuration
-  config validate        Validate configuration
-  nodes list             List all nodes
-  nodes show <node>      Show detailed node information
-  ansible <module> <args> Execute ansible module
-  ansible playbook <file> Execute ansible playbook
-  status                 Check host connectivity and repository status
-  merge                  Merge storage directories
-  search <pattern>       Search inventory and playbooks
-  migrate --from-bash    Migrate from bash maestro
-  git <subcommand>       Perform git operations
-  setup                   Setup project dependencies and repositories
+  create <template> <name>  Create new project from template
+  create --wizard           Interactive project creation wizard
+  create --list             List available project templates
+  init                      Initialize new project (legacy)
+  setup                     Setup dependencies and clone repositories
+  config show              Show current configuration
+  config validate          Validate configuration
+  nodes list               List all nodes
+  nodes show <node>        Show detailed node information
+  ansible <module> <args>  Execute ansible module
+  ansible playbook <file>  Execute ansible playbook
+  status                   Check host connectivity and repository status
+  merge                    Merge storage directories
+  search <pattern>         Search inventory and playbooks
+  migrate --from-bash      Migrate from bash maestro
+  git <subcommand>         Perform git operations
 
 Options:
   -c, --config FILE      Configuration file path
@@ -44,7 +47,11 @@ Options:
   -h, --help             Show this help message
 
 Examples:
-  pyestro init
+  pyestro create basic my-project        Create basic project
+  pyestro create home-network my-home    Create home automation project
+  pyestro create --wizard                Interactive project creation
+  pyestro create --list                  Show available templates
+  pyestro init                           Initialize legacy project
   pyestro config show
   pyestro nodes list
   pyestro ansible setup
@@ -525,6 +532,91 @@ class CLI:
         print("\nSetup completed!")
         return 0
     
+    def cmd_create(self, args: list[str]) -> int:
+        """Create new project from template."""
+        if not args:
+            print("Error: create command requires arguments")
+            print("Usage: pyestro create <template> <name> [options]")
+            print("       pyestro create --wizard")
+            print("       pyestro create --list")
+            return 1
+        
+        # Initialize project generator
+        generator = ProjectGenerator()
+        
+        # Handle special options
+        if args[0] == "--list":
+            templates = generator.list_templates()
+            if not templates:
+                print("No templates available!")
+                return 1
+            
+            print("Available project templates:")
+            for template in templates:
+                description = template.get('description', 'No description')
+                print(f"  {template['name']:<15} - {description}")
+            return 0
+        
+        elif args[0] == "--wizard":
+            return 0 if generator.interactive_create() else 1
+        
+        else:
+            # Standard create command: pyestro create <template> <name>
+            if len(args) < 2:
+                print("Error: create command requires template name and project name")
+                print("Usage: pyestro create <template> <name>")
+                print("       pyestro create --list  (to see available templates)")
+                return 1
+            
+            template_name = args[0]
+            project_name = args[1]
+            
+            # Parse additional options
+            target_dir = None
+            variables = {}
+            
+            i = 2
+            while i < len(args):
+                arg = args[i]
+                if arg == "--dir" and i + 1 < len(args):
+                    target_dir = Path(args[i + 1])
+                    i += 2
+                elif arg.startswith("--var="):
+                    # Handle --var=key=value
+                    var_part = arg[6:]  # Remove --var=
+                    if "=" in var_part:
+                        key, value = var_part.split("=", 1)
+                        variables[key] = value
+                    i += 1
+                else:
+                    print(f"Unknown option: {arg}")
+                    return 1
+            
+            # Set default target directory
+            if target_dir is None:
+                target_dir = Path.cwd() / project_name
+            
+            # Create the project
+            print(f"Creating project '{project_name}' using template '{template_name}'...")
+            success = generator.create_project(
+                template_name, 
+                project_name, 
+                target_dir, 
+                variables,
+                dry_run=self.dry_run
+            )
+            
+            if success:
+                print(f"Project created successfully in: {target_dir}")
+                print("\nNext steps:")
+                print(f"  cd {target_dir}")
+                print("  # Edit pyestro.json to configure your setup")
+                print("  pyestro config validate")
+                return 0
+            else:
+                print("Failed to create project!")
+                return 1
+    
     def run(self, args: list[str]) -> int:
         """Run CLI with given arguments."""
         command, command_args = self.parse_args(args)
@@ -535,6 +627,8 @@ class CLI:
         elif command == "version":
             print_version()
             return 0
+        elif command == "create":
+            return self.cmd_create(command_args)
         elif command == "setup":
             return self.cmd_setup(command_args)
         elif command == "init":

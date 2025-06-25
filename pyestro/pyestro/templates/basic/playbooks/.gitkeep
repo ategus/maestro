@@ -1,0 +1,2 @@
+# This file ensures the playbooks directory is included in git
+# Add your Ansible playbooks here

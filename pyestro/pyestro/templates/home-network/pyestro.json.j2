@@ -1,0 +1,44 @@
+{
+  "maestro_dir": ".",
+  "work_dir": "./workdir",
+  "dry_run": false,
+  "verbose": 1,
+  "force": false,
+  "repositories": {
+    "common_playbooks": "https://github.com/zwischenloesung/common-playbooks"
+  },
+  "inventory_dirs": {
+    "local": "./inventory"
+  },
+  "playbook_dirs": {
+    "local": "./playbooks",
+    "common": "./common_playbooks"
+  },
+  "local_dirs": {
+    "scripts": "./scripts",
+    "backups": "./{{backup_location}}"
+  },
+  "ansible": {
+    "config_file": "./ansible.cfg",
+    "managed_banner": "{{project_name}} - Ansible managed. Local changes will be lost!",
+    "timeout": 60,
+    "scp_if_ssh": true,
+    "galaxy_roles_dir": ".ansible-galaxy-roles",
+    "host_key_checking": false,
+    "inventory": "./workdir/inventory"
+  },
+  "rsync_options": "-a -m --exclude=.keep --exclude=*.swp",
+  "node_filter": null,
+  "class_filter": null,
+  "project_filter": "{{network_name}}",
+  "network": {
+    "name": "{{network_name}}",
+    "domain": "{{domain_name}}",
+    "subnet": "{{network_subnet}}"
+  },
+  "features": {
+    "homeassistant": "{{has_homeassistant}}",
+    "nas": "{{has_nas}}", 
+    "monitoring": "{{has_monitoring}}"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "home-network",
+  "description": "Complete home automation and network management setup",
+  "version": "1.0.0",
+  "author": "Pyestro Team",
+  "variables": {
+    "network_name": {
+      "prompt": "Home network name",
+      "default": "home",
+      "description": "Name for your home network (used in configurations)"
+    },
+    "domain_name": {
+      "prompt": "Local domain name",
+      "default": "home.local",
+      "description": "Local domain name for your network"
+    },
+    "network_subnet": {
+      "prompt": "Network subnet",
+      "default": "192.168.1.0/24", 
+      "description": "Main network subnet (CIDR notation)"
+    },
+    "has_homeassistant": {
+      "prompt": "Include Home Assistant setup (y/n)",
+      "default": "y",
+      "description": "Whether to include Home Assistant configuration"
+    },
+    "has_nas": {
+      "prompt": "Include NAS server setup (y/n)",
+      "default": "y",
+      "description": "Whether to include NAS server configuration"
+    },
+    "has_monitoring": {
+      "prompt": "Include monitoring setup (y/n)",
+      "default": "y",
+      "description": "Whether to include network monitoring configuration"
+    },
+    "backup_location": {
+      "prompt": "Backup storage location",
+      "default": "./backups",
+      "description": "Directory for storing configuration backups"
+    }
+  },
+  "files": [
+    "pyestro.json.j2",
+    "README.md.j2",
+    ".gitignore.j2",
+    "setup.sh.j2"
+  ],
+  "directories": [
+    "workdir",
+    "inventory/classes/hardware",
+    "inventory/classes/services", 
+    "inventory/classes/network",
+    "inventory/classes/security",
+    "inventory/nodes",
+    "playbooks/roles",
+    "scripts",
+    "{{backup_location}}"
+  ]
+}

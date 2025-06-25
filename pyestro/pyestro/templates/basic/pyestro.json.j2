@@ -1,0 +1,26 @@
+{
+  "maestro_dir": ".",
+  "work_dir": "./{{work_dir}}",
+  "dry_run": false,
+  "verbose": 1,
+  "force": false,
+  "repositories": {},
+  "inventory_dirs": {
+    "local": "./inventory"
+  },
+  "playbook_dirs": {
+    "local": "./playbooks"
+  },
+  "local_dirs": {},
+  "ansible": {
+    "config_file": "./ansible.cfg",
+    "managed_banner": "Ansible managed: {{project_name}}. Local changes will be lost!",
+    "timeout": 60,
+    "scp_if_ssh": true,
+    "galaxy_roles_dir": ".ansible-galaxy-roles"
+  },
+  "rsync_options": "-a -m --exclude=.keep",
+  "node_filter": null,
+  "class_filter": null, 
+  "project_filter": null
+}

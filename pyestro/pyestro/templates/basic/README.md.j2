@@ -1,0 +1,80 @@
+# {{project_name}}
+
+A Pyestro configuration management project.
+
+## Overview
+
+This project was created using the Pyestro **basic** template. It provides a minimal setup for configuration management with reclass and Ansible.
+
+## Project Structure
+
+```
+{{project_name}}/
+├── pyestro.json          # Main configuration file
+├── {{work_dir}}/         # Working directory for Pyestro operations
+├── inventory/            # Reclass inventory
+│   ├── classes/          # Reclass classes (templates)
+│   └── nodes/            # Individual node configurations
+├── playbooks/            # Ansible playbooks
+└── README.md             # This file
+```
+
+## Getting Started
+
+1. **Configure your project**: Edit `pyestro.json` to match your environment
+2. **Validate configuration**: Run `pyestro config validate`
+3. **Add your inventory**: Create classes and nodes in the `inventory/` directory
+4. **Add playbooks**: Create Ansible playbooks in the `playbooks/` directory
+5. **Initialize repositories**: Run `pyestro setup` to clone any configured repositories
+
+## Basic Commands
+
+```bash
+# Validate your configuration
+pyestro config validate
+
+# Show current configuration  
+pyestro config show
+
+# Setup project dependencies and repositories
+pyestro setup
+
+# List available nodes
+pyestro nodes list
+
+# Show detailed node information
+pyestro nodes show <node-name>
+
+# Execute Ansible modules
+pyestro ansible ping
+
+# Run Ansible playbooks
+pyestro ansible playbook site.yml
+
+# Check host connectivity and status
+pyestro status
+```
+
+## Configuration
+
+The main configuration is in `pyestro.json`. Key sections:
+
+- **repositories**: Git repositories to clone and manage
+- **inventory_dirs**: Directories containing reclass inventory
+- **playbook_dirs**: Directories containing Ansible playbooks
+- **ansible**: Ansible-specific configuration (if enabled)
+
+## Documentation
+
+For more information, see the [Pyestro documentation](https://github.com/inofix/pyestro).
+
+## Support
+
+- GitHub Issues: Report bugs and request features
+- Documentation: Complete guides and tutorials
+- Examples: Sample configurations and use cases
+
+---
+
+Generated with Pyestro template: `basic`
+Project created: {% raw %}{{ ansible_date_time.iso8601 if ansible_date_time is defined else "Unknown" }}{% endraw %}
