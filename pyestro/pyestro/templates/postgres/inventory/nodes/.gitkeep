@@ -1,0 +1,2 @@
+# PostgreSQL server node configurations
+# Setup script will generate primary-db.yml and backup-server.yml

@@ -1,0 +1,2 @@
+# Ansible handlers for PostgreSQL primary
+# Add restart postgresql, reload config handlers

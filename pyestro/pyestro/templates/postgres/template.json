@@ -1,0 +1,83 @@
+{
+  "name": "postgres",
+  "description": "PostgreSQL database setup with backup solution on secondary server",
+  "version": "1.0.0",
+  "author": "Pyestro Team",
+  "variables": {
+    "primary_db_ip": {
+      "prompt": "Primary database server IP address",
+      "default": "192.168.1.120",
+      "description": "IP address of the primary PostgreSQL server"
+    },
+    "backup_server_ip": {
+      "prompt": "Backup server IP address",
+      "default": "192.168.1.121",
+      "description": "IP address of the backup/secondary server"
+    },
+    "db_name": {
+      "prompt": "Database name",
+      "default": "myapp",
+      "description": "Name of the primary application database"
+    },
+    "db_user": {
+      "prompt": "Database user",
+      "default": "myapp_user",
+      "description": "Primary application database user"
+    },
+    "postgresql_version": {
+      "prompt": "PostgreSQL version",
+      "default": "14",
+      "description": "PostgreSQL major version to install"
+    },
+    "enable_replication": {
+      "prompt": "Enable streaming replication (y/n)",
+      "default": "y",
+      "description": "Enable streaming replication for high availability"
+    },
+    "backup_retention_days": {
+      "prompt": "Backup retention period (days)",
+      "default": "30",
+      "description": "Number of days to retain backups"
+    },
+    "enable_ssl": {
+      "prompt": "Enable SSL/TLS encryption (y/n)",
+      "default": "y",
+      "description": "Enable SSL/TLS for secure connections"
+    },
+    "max_connections": {
+      "prompt": "Maximum database connections",
+      "default": "200",
+      "description": "Maximum number of concurrent connections"
+    },
+    "shared_buffers": {
+      "prompt": "Shared buffers size",
+      "default": "256MB",
+      "description": "PostgreSQL shared_buffers setting"
+    }
+  },
+  "files": [
+    "pyestro.json.j2",
+    "README.md.j2",
+    ".gitignore.j2",
+    "setup.sh.j2"
+  ],
+  "directories": [
+    "workdir",
+    "inventory/classes/hardware",
+    "inventory/classes/services",
+    "inventory/classes/network",
+    "inventory/classes/security",
+    "inventory/classes/monitoring",
+    "inventory/nodes",
+    "playbooks/roles/postgresql_primary/tasks",
+    "playbooks/roles/postgresql_primary/templates",
+    "playbooks/roles/postgresql_primary/handlers",
+    "playbooks/roles/postgresql_backup/tasks",
+    "playbooks/roles/postgresql_backup/templates",
+    "playbooks/roles/postgresql_backup/handlers",
+    "playbooks/roles/monitoring/tasks",
+    "playbooks/roles/security/tasks",
+    "scripts",
+    "backups"
+  ]
+}

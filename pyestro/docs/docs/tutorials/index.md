@@ -16,6 +16,19 @@ Welcome to the Pyestro tutorials section! Here you'll find step-by-step guides f
 
 **Perfect for:** Home lab enthusiasts, smart home builders, self-hosting advocates
 
+### 🗄️ [PostgreSQL Database Setup](postgresql-setup.md)
+**Difficulty:** Intermediate  
+**Time:** 3-5 hours  
+**What you'll learn:**
+- Deploy production-ready PostgreSQL infrastructure
+- Set up automated backup solution on secondary server
+- Configure streaming replication for high availability
+- Implement monitoring and alerting
+- Secure database with SSL/TLS and proper access controls
+- Manage database operations and maintenance
+
+**Perfect for:** Application developers, database administrators, infrastructure teams
+
 ### 🚀 Quick Start Resources
 
 - **[Setup Script](setup-home-network.sh)** - Automated project bootstrap

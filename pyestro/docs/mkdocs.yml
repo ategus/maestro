@@ -35,6 +35,7 @@ nav:
   - Tutorials:
     - Overview: tutorials/index.md
     - Home Network Setup: tutorials/home-network-setup.md
+    - PostgreSQL Setup: tutorials/postgresql-setup.md
   - User Guide:
     - Commands: user-guide/commands.md
     - Project Templates: user-guide/project-templates.md

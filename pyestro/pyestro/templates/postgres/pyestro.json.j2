@@ -1,0 +1,49 @@
+{
+  "maestro_dir": ".",
+  "work_dir": "./workdir",
+  "dry_run": false,
+  "verbose": 1,
+  "force": false,
+  "repositories": {
+    "common_playbooks": "https://github.com/zwischenloesung/common-playbooks"
+  },
+  "inventory_dirs": {
+    "local": "./inventory"
+  },
+  "playbook_dirs": {
+    "local": "./playbooks",
+    "common": "./common_playbooks"
+  },
+  "local_dirs": {
+    "scripts": "./scripts",
+    "backups": "./backups"
+  },
+  "ansible": {
+    "config_file": "./ansible.cfg",
+    "managed_banner": "{{project_name}} - PostgreSQL Infrastructure. Ansible managed!",
+    "timeout": 60,
+    "scp_if_ssh": true,
+    "galaxy_roles_dir": ".ansible-galaxy-roles",
+    "host_key_checking": false,
+    "inventory": "./workdir/inventory"
+  },
+  "rsync_options": "-a -m --exclude=.keep --exclude=*.swp",
+  "node_filter": null,
+  "class_filter": null,
+  "project_filter": "{{project_name}}",
+  "database": {
+    "primary_host": "{{primary_db_ip}}",
+    "backup_host": "{{backup_server_ip}}",
+    "name": "{{db_name}}",
+    "user": "{{db_user}}",
+    "version": "{{postgresql_version}}",
+    "max_connections": "{{max_connections}}",
+    "shared_buffers": "{{shared_buffers}}"
+  },
+  "features": {
+    "replication": "{{enable_replication}}",
+    "ssl": "{{enable_ssl}}",
+    "monitoring": "y",
+    "backup_retention_days": "{{backup_retention_days}}"
+  }
+}

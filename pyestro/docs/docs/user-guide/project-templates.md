@@ -126,6 +126,74 @@ my-smart-home/
 └── backups/                  # Backup storage
 ```
 
+### PostgreSQL Template
+
+**Purpose**: Production-ready PostgreSQL database infrastructure with automated backup solution.
+
+**Use Cases**:
+- Application database backend
+- Data warehousing and analytics
+- High-availability database clusters
+- Database backup and disaster recovery
+
+**What's Included**:
+- Primary PostgreSQL server configuration
+- Backup server with automated backup solution
+- Streaming replication setup
+- SSL/TLS encryption configuration
+- Monitoring and alerting setup
+- Database management scripts
+
+**Variables**:
+- `primary_db_ip`: Primary database server IP (default: `192.168.1.120`)
+- `backup_server_ip`: Backup server IP (default: `192.168.1.121`)
+- `db_name`: Database name (default: `myapp`)
+- `db_user`: Database user (default: `myapp_user`)
+- `postgresql_version`: PostgreSQL version (default: `14`)
+- `enable_replication`: Enable streaming replication (default: `y`)
+- `backup_retention_days`: Backup retention period (default: `30`)
+- `enable_ssl`: Enable SSL/TLS (default: `y`)
+- `max_connections`: Maximum connections (default: `200`)
+- `shared_buffers`: Shared buffers size (default: `256MB`)
+
+**Example**:
+```bash
+python pyestro.py create postgres my-database \
+  --var=primary_db_ip=10.0.1.120 \
+  --var=backup_server_ip=10.0.1.121 \
+  --var=db_name=production_db \
+  --var=db_user=app_user \
+  --var=postgresql_version=14 \
+  --var=enable_replication=y \
+  --var=backup_retention_days=30
+```
+
+**Generated Structure**:
+```
+my-database/
+├── pyestro.json              # Main configuration
+├── README.md                 # Database documentation
+├── setup.sh                  # Setup script
+├── inventory/                # Server definitions
+│   ├── classes/
+│   │   ├── hardware/         # Server hardware configs
+│   │   ├── services/         # PostgreSQL configs
+│   │   ├── network/          # Network configurations
+│   │   ├── security/         # Security policies
+│   │   └── monitoring/       # Monitoring configs
+│   └── nodes/
+│       ├── primary-db.yml    # Primary database server
+│       └── backup-server.yml # Backup server
+├── playbooks/                # Ansible automation
+│   ├── site.yml              # Main deployment
+│   └── roles/                # PostgreSQL roles
+├── scripts/                  # Management scripts
+│   ├── backup_postgresql.sh  # Backup automation
+│   ├── monitoring.sh         # Health checks
+│   └── restore_postgresql.sh # Restore procedures
+└── backups/                  # Local backup storage
+```
+
 ## Interactive Wizard
 
 The interactive wizard guides you through project creation:

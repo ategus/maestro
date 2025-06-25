@@ -1,0 +1,2 @@
+# Local backup storage directory
+# Backup scripts will create subdirectories: full/, incremental/, logical/

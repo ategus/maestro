@@ -1,0 +1,2 @@
+# PostgreSQL configuration templates
+# Add postgresql.conf.j2, pg_hba.conf.j2, etc.

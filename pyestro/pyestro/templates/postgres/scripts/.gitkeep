@@ -1,0 +1,2 @@
+# PostgreSQL management scripts
+# Setup script will generate backup_postgresql.sh, monitoring.sh, etc.

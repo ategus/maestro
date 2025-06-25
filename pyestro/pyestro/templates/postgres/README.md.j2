@@ -1,0 +1,400 @@
+# {{project_name}} - PostgreSQL Database Infrastructure
+
+A comprehensive PostgreSQL database setup with automated backup solution powered by Pyestro.
+
+## Overview
+
+This project provides a production-ready PostgreSQL infrastructure including:
+
+- 🗄️ **Primary PostgreSQL Server** ({{primary_db_ip}}) - High-performance database server
+- 🔄 **Backup Server** ({{backup_server_ip}}) - Automated backup and recovery solution
+{% if enable_replication == 'y' %}
+- 📡 **Streaming Replication** - Real-time data replication for high availability
+{% endif %}
+{% if enable_ssl == 'y' %}
+- 🔒 **SSL/TLS Encryption** - Secure database connections
+{% endif %}
+- 📊 **Monitoring** - Database performance and health monitoring
+- 🛡️ **Security** - Hardened configuration and access controls
+
+## Database Configuration
+
+- **Database Name**: {{db_name}}
+- **Database User**: {{db_user}}
+- **PostgreSQL Version**: {{postgresql_version}}
+- **Max Connections**: {{max_connections}}
+- **Shared Buffers**: {{shared_buffers}}
+- **Backup Retention**: {{backup_retention_days}} days
+
+## Project Structure
+
+```
+{{project_name}}/
+├── pyestro.json              # Main configuration
+├── inventory/                # Database server definitions
+│   ├── classes/
+│   │   ├── hardware/         # Server hardware configs
+│   │   ├── services/         # PostgreSQL service configs
+│   │   ├── network/          # Network configurations
+│   │   ├── security/         # Security policies
+│   │   └── monitoring/       # Monitoring configs
+│   └── nodes/
+│       ├── primary-db.yml    # Primary database server
+│       └── backup-server.yml # Backup server
+├── playbooks/                # Ansible automation
+│   ├── site.yml              # Main deployment playbook
+│   └── roles/                # PostgreSQL roles
+│       ├── postgresql_primary/
+│       ├── postgresql_backup/
+│       ├── monitoring/
+│       └── security/
+├── scripts/                  # Management scripts
+│   ├── backup_postgresql.sh  # Backup automation
+│   ├── restore_postgresql.sh # Restoration script
+│   └── monitoring.sh         # Health checks
+├── backups/                  # Local backup storage
+└── README.md                 # This file
+```
+
+## Quick Start
+
+### 1. Setup Environment
+
+```bash
+# Navigate to project directory
+cd {{project_name}}
+
+# Validate configuration
+python pyestro.py config validate
+
+# Setup repositories and dependencies
+python pyestro.py setup
+```
+
+### 2. Deploy Infrastructure
+
+```bash
+# Deploy primary database server
+python pyestro.py ansible playbook site.yml --limit primary-db
+
+# Deploy backup server
+python pyestro.py ansible playbook site.yml --limit backup-server
+
+# Verify deployment
+python pyestro.py status
+```
+
+### 3. Verify Database Setup
+
+```bash
+# Test database connection
+psql -h {{primary_db_ip}} -U {{db_user}} -d {{db_name}} -c "SELECT version();"
+
+{% if enable_replication == 'y' %}
+# Check replication status
+psql -h {{primary_db_ip}} -U postgres -c "SELECT * FROM pg_stat_replication;"
+{% endif %}
+
+# Test backup system
+./scripts/backup_postgresql.sh verify
+```
+
+## Server Management
+
+### Primary Database Server
+
+**Access Information:**
+- **Host**: {{primary_db_ip}}
+- **Port**: 5432
+- **Database**: {{db_name}}
+- **User**: {{db_user}}
+
+**Management Commands:**
+```bash
+# Connect to database
+psql -h {{primary_db_ip}} -U {{db_user}} -d {{db_name}}
+
+# Check database status
+python pyestro.py ansible shell "systemctl status postgresql" --limit primary-db
+
+# View database logs
+python pyestro.py ansible shell "tail -f /var/log/postgresql/postgresql-{{postgresql_version}}-main.log" --limit primary-db
+
+# Restart PostgreSQL
+python pyestro.py ansible service "name=postgresql state=restarted" --limit primary-db
+```
+
+### Backup Server
+
+**Access Information:**
+- **Host**: {{backup_server_ip}}
+- **Backup Directory**: /var/lib/postgresql/backups
+- **Retention**: {{backup_retention_days}} days
+
+**Backup Commands:**
+```bash
+# Manual full backup
+./scripts/backup_postgresql.sh full
+
+# Manual logical backup
+./scripts/backup_postgresql.sh logical
+
+# Verify latest backup
+./scripts/backup_postgresql.sh verify
+
+# Check backup disk usage
+python pyestro.py ansible shell "df -h /var/lib/postgresql/backups" --limit backup-server
+```
+
+## Database Operations
+
+### Common Database Tasks
+
+```bash
+# Create new database
+psql -h {{primary_db_ip}} -U postgres -c "CREATE DATABASE newdb OWNER {{db_user}};"
+
+# Create new user
+psql -h {{primary_db_ip}} -U postgres -c "CREATE USER newuser WITH PASSWORD 'securepassword';"
+
+# Grant privileges
+psql -h {{primary_db_ip}} -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE {{db_name}} TO newuser;"
+
+# Check database size
+psql -h {{primary_db_ip}} -U postgres -c "SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database;"
+```
+
+### Performance Monitoring
+
+```bash
+# Check active connections
+psql -h {{primary_db_ip}} -U postgres -c "SELECT count(*) FROM pg_stat_activity WHERE state = 'active';"
+
+# Monitor query performance
+psql -h {{primary_db_ip}} -U postgres -c "SELECT query, calls, total_time, mean_time FROM pg_stat_statements ORDER BY total_time DESC LIMIT 10;"
+
+{% if enable_replication == 'y' %}
+# Check replication lag
+psql -h {{primary_db_ip}} -U postgres -c "SELECT client_addr, state, pg_size_pretty(pg_wal_lsn_diff(pg_current_wal_lsn(), sent_lsn)) as lag FROM pg_stat_replication;"
+{% endif %}
+```
+
+## Backup and Recovery
+
+### Automated Backups
+
+Backups are scheduled automatically:
+- **Full Backup**: Weekly (Sunday 2 AM)
+- **Incremental Backup**: Daily (Monday-Saturday 2 AM)
+- **Logical Backup**: Daily (4 AM)
+
+### Manual Backup Operations
+
+```bash
+# Full physical backup
+./scripts/backup_postgresql.sh full
+
+# Logical backup (SQL dump)
+./scripts/backup_postgresql.sh logical
+
+# Backup verification
+./scripts/backup_postgresql.sh verify
+
+# Cleanup old backups
+./scripts/backup_postgresql.sh cleanup
+```
+
+### Disaster Recovery
+
+```bash
+# List available backups
+ls -la backups/full/
+
+# Restore from backup (DANGER: This will replace current data)
+./scripts/restore_postgresql.sh /path/to/backup
+
+# Point-in-time recovery
+# See detailed recovery procedures in the tutorial documentation
+```
+
+## Security Features
+
+### Access Control
+- **Network Security**: Firewall rules restricting database access
+- **User Authentication**: Strong password policies
+- **Connection Limits**: Protection against connection exhaustion
+{% if enable_ssl == 'y' %}
+- **SSL/TLS Encryption**: All connections encrypted in transit
+{% endif %}
+
+### Security Commands
+
+```bash
+# Check firewall status
+python pyestro.py ansible shell "ufw status" --limit primary-db
+
+# Review database users
+psql -h {{primary_db_ip}} -U postgres -c "SELECT usename, usesuper, usecreatedb FROM pg_user;"
+
+# Check failed login attempts
+python pyestro.py ansible shell "grep 'authentication failed' /var/log/postgresql/postgresql-{{postgresql_version}}-main.log" --limit primary-db
+```
+
+## Monitoring and Alerting
+
+### Health Checks
+
+```bash
+# Database connectivity
+pg_isready -h {{primary_db_ip}} -p 5432
+
+# System resource usage
+python pyestro.py ansible shell "htop -n 1" --limit primary-db
+
+# Disk space monitoring
+python pyestro.py ansible shell "df -h" --limit primary-db,backup-server
+```
+
+### Performance Metrics
+
+```bash
+# Database statistics
+./scripts/monitoring.sh --stats
+
+# Replication monitoring
+./scripts/monitoring.sh --replication
+
+# Backup status
+./scripts/monitoring.sh --backups
+```
+
+## Maintenance Tasks
+
+### Daily Tasks
+- ✅ Monitor backup completion
+- ✅ Check replication lag
+- ✅ Review error logs
+- ✅ Monitor disk space
+
+### Weekly Tasks
+- ✅ Review performance metrics
+- ✅ Check backup integrity
+- ✅ Review security logs
+- ✅ Update statistics
+
+### Monthly Tasks
+- ✅ Test backup restoration
+- ✅ Review and update configurations
+- ✅ Apply security updates
+- ✅ Capacity planning review
+
+## Configuration Customization
+
+### Database Tuning
+
+Edit `inventory/nodes/primary-db.yml` to adjust PostgreSQL settings:
+
+```yaml
+postgresql:
+  # Performance settings
+  shared_buffers: "{{shared_buffers}}"
+  effective_cache_size: "1GB"
+  maintenance_work_mem: "64MB"
+  
+  # Connection settings
+  max_connections: {{max_connections}}
+  
+  # Logging settings
+  log_min_duration_statement: 1000
+  log_statement: "mod"
+```
+
+### Backup Configuration
+
+Edit `inventory/nodes/backup-server.yml` to modify backup settings:
+
+```yaml
+postgresql_backup:
+  retention: {{backup_retention_days}}
+  schedules:
+    full_backup:
+      cron: "0 2 * * 0"  # Weekly
+    incremental_backup:
+      cron: "0 2 * * 1-6"  # Daily
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Connection Refused**
+```bash
+# Check PostgreSQL status
+python pyestro.py ansible shell "systemctl status postgresql" --limit primary-db
+
+# Check network connectivity
+telnet {{primary_db_ip}} 5432
+
+# Review firewall rules
+python pyestro.py ansible shell "ufw status" --limit primary-db
+```
+
+**Backup Failures**
+```bash
+# Check backup logs
+python pyestro.py ansible shell "tail -50 /var/log/postgresql_backup.log" --limit backup-server
+
+# Verify backup disk space
+python pyestro.py ansible shell "df -h /var/lib/postgresql/backups" --limit backup-server
+
+# Test manual backup
+./scripts/backup_postgresql.sh full
+```
+
+**Performance Issues**
+```bash
+# Check system resources
+python pyestro.py ansible shell "top -n 1" --limit primary-db
+
+# Review slow queries
+psql -h {{primary_db_ip}} -U postgres -c "SELECT query, calls, total_time FROM pg_stat_statements ORDER BY total_time DESC LIMIT 5;"
+
+# Check for locks
+psql -h {{primary_db_ip}} -U postgres -c "SELECT * FROM pg_locks WHERE NOT GRANTED;"
+```
+
+## Advanced Configuration
+
+### High Availability
+
+For production environments, consider:
+- **Automatic Failover**: Implement with Patroni or repmgr
+- **Load Balancing**: Use HAProxy or PgBouncer
+- **Multi-Region Setup**: Cross-region replication
+
+### Performance Optimization
+
+- **Connection Pooling**: Configure PgBouncer
+- **Query Optimization**: Regular ANALYZE and VACUUM
+- **Index Management**: Monitor and optimize indexes
+- **Partitioning**: For large tables
+
+## Support and Documentation
+
+- **PostgreSQL Documentation**: https://postgresql.org/docs/{{postgresql_version}}/
+- **Pyestro Documentation**: See project documentation
+- **Tutorial**: Follow the [PostgreSQL Setup Tutorial](../tutorials/postgresql-setup.md)
+
+## Emergency Contacts
+
+- **Database Administrator**: [Contact Information]
+- **System Administrator**: [Contact Information]
+- **On-Call Support**: [Contact Information]
+
+---
+
+**Infrastructure**: {{project_name}}
+**Primary DB**: {{primary_db_ip}} (PostgreSQL {{postgresql_version}})
+**Backup Server**: {{backup_server_ip}} 
+**Template**: postgres
+**Generated**: {% raw %}{{ ansible_date_time.iso8601 if ansible_date_time is defined else "Unknown" }}{% endraw %}

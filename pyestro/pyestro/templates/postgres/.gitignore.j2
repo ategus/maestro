@@ -1,0 +1,87 @@
+# Pyestro working directory
+workdir/
+
+# Ansible files
+*.retry
+.ansible-galaxy-roles/
+ansible.cfg
+
+# Database secrets and credentials
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+.env
+.env.local
+.vault_pass
+vault_pass.txt
+inventory/host_vars/*/vault.yml
+inventory/group_vars/*/vault.yml
+
+# PostgreSQL specific
+*.sql
+*.dump
+*.backup
+pg_hba.conf.backup
+postgresql.conf.backup
+
+# Backup files
+backups/*.tar.gz
+backups/*.zip
+backups/tmp/
+backups/full/
+backups/incremental/
+backups/logical/
+
+# SSL certificates (keep structure, not actual certs)
+ssl/*.crt
+ssl/*.key
+ssl/*.pem
+!ssl/.gitkeep
+
+# Logs
+*.log
+logs/
+/var/log/
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+*.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local configuration overrides
+pyestro.local.json
+config.local.*
+
+# Monitoring data
+monitoring/data/
+grafana/data/
+prometheus/data/
