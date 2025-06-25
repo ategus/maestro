@@ -1,6 +1,8 @@
 # Pyestro Summary
 
-![Pyestro Logo](./pyestro/pyestro_logo.png "Pyestro - Modern Python Configuration Management Orchestrator")
+<div align="center">
+  <img src="./pyestro/pyestro_logo.png" alt="Pyestro Logo" width="200" height="auto" />
+</div>
 
 **Pyestro** is the modern Python successor to Maestro, designed for orchestrating configuration management environments with enhanced security, maintainability, and functionality.
 
