@@ -1,5 +1,7 @@
 # Pyestro Summary
 
+![Pyestro Logo](./pyestro/pyestro_logo.png "Pyestro - Modern Python Configuration Management Orchestrator")
+
 **Pyestro** is the modern Python successor to Maestro, designed for orchestrating configuration management environments with enhanced security, maintainability, and functionality.
 
 ## 🚀 Quick Start
